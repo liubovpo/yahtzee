@@ -79,9 +79,9 @@ const GamePage = () => {
               ))}
             </TableRow>
             <TableRow >
-              <TableCell>Total</TableCell>
+              <TableCell sx={{fontWeight:'bold'}}>Total</TableCell>
               {players.map((player, playerIndex) => (
-                <TableCell key={playerIndex}>
+                <TableCell sx={{fontWeight:'bold'}} key={playerIndex}>
                   {categories.reduce((total, category) => total + (scores[player]?.[category] || 0), 0)}
                 </TableCell>
               ))}
