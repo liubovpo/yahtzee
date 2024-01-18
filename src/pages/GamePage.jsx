@@ -40,9 +40,14 @@ const fixedPoints = {
 };
 
 const GamePage = () => {
-  const [players, setPlayers] = useState(['liuba', 'andreas', 'shitty']); // Add more players as needed
+  const [players, setPlayers] = useState(['liuba', 'andreas']); // Add more players as needed
   const [scores, setScores] = useState({});
   const [confirmedScores, setConfirmedScores] = useState({});
+
+  const buttonStyle = {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    color: '#ffffff',
+  };
 
   const handleScoreConfirmation = (category, playerName, score) => {
     if (score !== '') {
@@ -60,15 +65,24 @@ const GamePage = () => {
   };
 
   return (
-    <Container sx={{ m: 10 }}>
-      <TableContainer component={Paper}>
-        <Table>
+    <Container sx={{mt:10}}>
+
+      <TableContainer component={Paper} sx={{ maxHeight: "calc(100vh - 100px)"}}>
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell>Categories</TableCell>
               {players.map((player, playerIndex) => (
                 <TableCell key={playerIndex} align="center">
                   {player}
+                </TableCell>
+              ))}
+            </TableRow>
+            <TableRow >
+              <TableCell>Total</TableCell>
+              {players.map((player, playerIndex) => (
+                <TableCell key={playerIndex}>
+                  {categories.reduce((total, category) => total + (scores[player]?.[category] || 0), 0)}
                 </TableCell>
               ))}
             </TableRow>
@@ -89,7 +103,7 @@ const GamePage = () => {
                       {isFixedCategory ? (
                         <Button
                           variant="contained"
-                          color="primary"
+                          // style={buttonStyle}
                           disabled={isScoreConfirmed}
                           onClick={() => handleScoreConfirmation(category, player, fixedPoints[category])}
                         >
@@ -108,6 +122,7 @@ const GamePage = () => {
                                 }}
                                 variant="outlined"
                                 value={inputValue}
+                                style={{ marginRight: '10px' }}
                                 onChange={(e) => {
                                   const value = parseInt(e.target.value, 10) || 0;
                                   setScores((prevScores) => ({
@@ -118,9 +133,8 @@ const GamePage = () => {
                               />
                               <Button
                                 variant="contained"
-                                color="primary"
+                                style={buttonStyle}
                                 onClick={() => handleScoreConfirmation(category, player, inputValue)}
-                                style={{ marginLeft: '10px' }}
                               >
                                 Confirm
                               </Button>
@@ -133,14 +147,6 @@ const GamePage = () => {
                 })}
               </TableRow>
             ))}
-            <TableRow>
-              <TableCell>Total</TableCell>
-              {players.map((player, playerIndex) => (
-                <TableCell key={playerIndex}>
-                  {categories.reduce((total, category) => total + (scores[player]?.[category] || 0), 0)}
-                </TableCell>
-              ))}
-            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>

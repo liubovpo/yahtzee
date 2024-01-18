@@ -11,13 +11,13 @@ import { Toolbar } from "@mui/material";
 function App() {
   return (
     <div>
-      <AppBar position="fixed" sx={{ backgroundColor: 'pink', width: '100%' }}>
+      <AppBar position="fixed" sx={{ background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)', width: '100%',overflow:"hidden" }}>
         <Container maxWidth="xl">
           <Toolbar>
-            <Button variant="contained" sx={{ m: 2 }} href="/">
+            <Button variant="contained" sx={{ backgroundColor:"white", color:'#fe6b8b', m: 2 }} href="/">
               New Game
             </Button>
-            <Button variant="outlined" sx={{ m: 2 }} href="/score">
+            <Button variant="outlined" sx={{ m: 2, borderColor:"white", color:'white' }} href="/score">
               Score
             </Button>
           </Toolbar>
