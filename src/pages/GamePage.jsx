@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 import {
   Container,
   Table,
@@ -40,24 +41,24 @@ const fixedPoints = {
 };
 
 const GamePage = () => {
-  const [players, setPlayers] = useState(['liuba', 'andreas']); // Add more players as needed
+  const [players, setPlayers] = useState([]); // Add more players as needed
   const [scores, setScores] = useState({});
   const [confirmedScores, setConfirmedScores] = useState({});
+  const { id } = useParams();
 
-  // useEffect(() => {
-  //   fetch(`${import.meta.env.VITE_API_URL}/game/${id}`)
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       setPlant(data.Plant);
-  //       console.log(data.Plant);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, [plantCareId]);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/game/${id}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setPlayers(data.map(player=>player.name));
+      })
+      .catch((error) => console.log(error));
+  }, []);
 
   const buttonStyle = {
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
