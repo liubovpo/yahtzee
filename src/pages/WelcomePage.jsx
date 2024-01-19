@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -11,24 +11,43 @@ import {
   Box,
 } from "@mui/material";
 
-
 const WelcomePage = () => {
   const [players, setPlayers] = useState([]);
   const [newPlayerName, setNewPlayerName] = useState("");
+  const navigate = useNavigate();
 
   const buttonStyle = {
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     color: '#ffffff',
   };
 
+  let id = null
+
   const handleAddPlayer = () => {
     if (newPlayerName.trim() !== "") {
-      setPlayers([...players, newPlayerName]);
+      setPlayers([...players,  { name: newPlayerName }]);
       setNewPlayerName("");
+      console.log(players)
     }
   };
 
   const handleStartGame = () => {
+    fetch(`${import.meta.env.VITE_API_URL}/players`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(players.map(player => ({ name: player.name }))),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('API response:', data);
+        id = data
+        navigate(`/game/${id}`)
+      })
+      .catch(error => {
+        console.error('Error posting player names to API:', error);
+      });
     console.log("Game started with players:", players);
   };
 
@@ -47,7 +66,7 @@ const WelcomePage = () => {
           <List>
             {players.map((player, index) => (
               <ListItem key={index}>
-                <Typography>{`${index + 1}. ${player}`}</Typography>
+                <Typography>{`${index + 1}. ${player.name}`}</Typography>
               </ListItem>
             ))}
           </List>
@@ -70,7 +89,7 @@ const WelcomePage = () => {
             </Button>
           </Box>
           <Box display="flex" justifyContent="center" marginTop="20px">
-            <Link to="/game">
+
               <Button
                 variant="contained"
                 color="primary"
@@ -79,7 +98,7 @@ const WelcomePage = () => {
               >
                 Start Game
               </Button>
-            </Link>
+
           </Box>
         </Paper>
       </Container>
